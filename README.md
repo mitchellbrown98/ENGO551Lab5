@@ -14,7 +14,7 @@
 
 - After you have finished drawing the line, the 'Simplify Line' and 'Delete Line' buttons will become enabled. Pressing 'Delete Line' will remove the line from the map, and reset the layer and array so you can draw a new line. Pressing 'Simplify Line' will use the Turf.js Simplify function to straighten the line:
 
-  ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h35_48.png)
+  ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/simplify.gif)
   
 - After the line has been simplified, the only button available is 'Delete Line'. Pressing this will remove the straightened line, and clear out the layers and coordinate array, so a new line can be drawn. The 'Draw' button will become enabled again once 'Delete Line' has been pressed:
 
