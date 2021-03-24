@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <title>ENGO 551 Lab 5</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
+<script src='https://www.unpkg.com/turf@3.0.14/turf.js'></script>
+
+<style>
+      #map {
+        position: absolute;
+        z-index:1;
+        height: 100%;
+        width: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+.button-box {
+   text-align:center;
+   padding-top: 10px; /* Location of the box */
+   margin-top: 0px;
+   margin-left: 40px;
+   z-index:2; /* Sit on top */
+   width: 30%; /* Full width */
+}
+
+
+</style>
+
+  </head>
+    <body>
+
+          <div id="map"></div>
+
+
+              <div class="button-box col-lg-12">
+                <button type="button" class="btn btn-primary" onclick="drawline()" id="draw" data-toggle="tooltip" title="Select the button, then click, hold, and move your mouse on the map to draw">Draw Line</button>
+                <button type="button" class="btn btn-primary" onclick="check()" id="simplify">Simplify Line</button>
+                <button type="button" class="btn btn-primary" onclick="deleteline()" id="delete">Delete Line</button>
+              </div>
+
+<script>
+//disable buttons to start
+$("#delete").attr("disabled", true);
+$("#simplify").attr("disabled", true);
+
+//display tooltip
+$('[data-toggle="tooltip"]').tooltip();
+
+//Initialize map, set view to center of calgary if location permissions //denied
+var map = L.map('map').setView([51.044, -114.07],11);
+//map.locate({setView: true, maxZoom: 11});
+// Add fullscreen control
+map.addControl(new L.Control.Fullscreen());
+
+//Add tilelayer to map
+L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png?api_key=30b6c838-4624-47eb-964a-87fcc2e3eb39', {maxZoom: 20, attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'}).addTo(map);
+
+var myLayer = L.geoJSON();
+var geojsonFeature;
+var coords = [];
+
+
+function drawline () {
+  //disable dragging so map cannot move
+  map.dragging.disable();
+  //Add the mousedown event listener to begin drawing
+  map.addEventListener('mousedown',function(e){
+    //disable draw button once drawing starts
+    $("#draw").attr("disabled", true);
+    //Add the mousemove event listener to draw when mouse moves
+    map.addEventListener('mousemove', function(ev) {
+      //add coords to array
+       var lat = ev.latlng.lat;
+       var lng = ev.latlng.lng;
+       var coord = [lng, lat];
+       coords.push(coord);
+       //create geojson feature each time coord is added and add it to map
+       geojsonFeature = {
+           "type": "Feature",
+           "geometry": {
+             "type": "LineString",
+             "coordinates": coords
+           }
+       };
+
+       myLayer.addData(geojsonFeature);
+       myLayer.addTo(map);
+    });
+  });
+
+  map.on('mouseup',function(e){
+    //Remove the event listeners when finished drawing
+    map.removeEventListener('mousemove');
+    map.removeEventListener('mousedown');
+    //re-enable the map dragging
+    map.dragging.enable();
+  });
+  //re-enable buttons
+  $('#delete').removeAttr('disabled');
+  $('#simplify').removeAttr('disabled');
+}
+
+
+function check (){
+  //convert the line into a simplified line
+  var geojson = turf.multiLineString([coords]);
+  var options = {tolerance: 0.01, highQuality: false};
+  var simplified = turf.simplify(geojson, options);
+  map.removeLayer(myLayer);
+  myLayer.clearLayers();
+  myLayer.addData(simplified);
+  myLayer.addTo(map);
+  coords=[];
+  $("#simplify").attr("disabled", true);
+}
+
+function deleteline (){
+  //remove everything from the map
+  map.removeLayer(myLayer);
+  myLayer.clearLayers();
+  coords=[];
+  $('#draw').removeAttr('disabled');
+  $("#simplify").attr("disabled", true);
+  $("#delete").attr("disabled", true);
+}
+
+
+
+
+
+  </script>
+
+  </body>
+</html>
