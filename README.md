@@ -1,6 +1,6 @@
 **Index.html:**
 
-- This page contains a light style stadia maps tilelayer, centered on calgary, with 3 buttons. Only the 'Draw' button is enabled when you first load the page:
+- This page contains a leaflet map with a light style stadia maps tilelayer, centered on Calgary, with 3 buttons. Only the 'Draw' button is enabled when you first load the page:
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h33_49.png)
 
@@ -8,7 +8,7 @@
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h33_59.png) 
 
-- After selecting 'Draw', you can click and hold, and move your mouse to draw the line on the map. A `mousedown` and `mousemove` listening event are added to the map when 'Draw' is selected. The mouse coordinates are added to an array each time the mouse moves, and those coordinates are added to the geojson linestring feature. To finish drawing, you can let go of the mouse click. 
+- After selecting 'Draw', you can click and hold, and move your mouse to draw the line on the map. When 'Draw' is pressed, the map dragging becomes disabled, and a  `mousedown` event listener is added. When the mouse is pressed down, a `mousemove` even listener is added. The mouse coordinates are added to an array each time the mouse moves, and those coordinates are added to the geojson linestring feature, which is updated each time the mouse moves, to display the line being drawn. To finish drawing, you can let go of the mouse click. 
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/drawing.gif)
 
