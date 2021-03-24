@@ -20,6 +20,5 @@
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h35_57.png)
   
-- Video Walkthrough:
+- Video Walkthrough: https://youtu.be/IzNvF5ORS_A
 
-  ![](https://youtu.be/IzNvF5ORS_A)
