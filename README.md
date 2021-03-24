@@ -8,7 +8,7 @@
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h33_59.png) 
 
-- After selecting 'Draw', you can click and hold, and move your mouse to draw the line on the map. A mousedown and mousemove listening event are added to the map when 'Draw' is selected. The mouse coordinates are added to an array each time the mouse moves, and those coordinates are added to the geojson linestring feature. To finish drawing, you can let go of the mouse click. 
+- After selecting 'Draw', you can click and hold, and move your mouse to draw the line on the map. A `mousedown` and `mousemove` listening event are added to the map when 'Draw' is selected. The mouse coordinates are added to an array each time the mouse moves, and those coordinates are added to the geojson linestring feature. To finish drawing, you can let go of the mouse click. 
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/drawing.gif)
 
@@ -19,3 +19,7 @@
 - After the line has been simplified, the only button available is 'Delete Line'. Pressing this will remove the straightened line, and clear out the layers and coordinate array, so a new line can be drawn. The 'Draw' button will become enabled again once 'Delete Line' has been pressed:
 
   ![](https://github.com/mitchellbrown98/ENGO551Lab5/blob/main/screenshots/2021-03-23_18h35_57.png)
+  
+- Video Walkthrough:
+
+  ![](https://youtu.be/IzNvF5ORS_A)
