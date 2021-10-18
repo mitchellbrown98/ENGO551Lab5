@@ -1,3 +1,5 @@
+In this project, I am using Turf.js to add line simplification to a web mapping application. users can draw a polyline, and when they click on a “simplify button”, the map will show a simplified version of the polyline drawn by the user.
+
 **Index.html:**
 
 - This page contains a leaflet map with a light style stadia maps tilelayer, centered on Calgary, with 3 buttons. Only the 'Draw' button is enabled when you first load the page:
